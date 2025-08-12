@@ -1,0 +1,15 @@
+# Perplexity MCP 服务器依赖文件
+# 基于 FastMCP 的 Streamable-HTTP MCP 服务器
+
+# 核心框架
+fastmcp>=2.9.0
+
+# HTTP 客户端
+httpx>=0.24.0
+
+# 环境变量加载
+python-dotenv>=1.0.0
+
+# 开发和测试工具（可选）
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
