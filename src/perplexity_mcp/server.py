@@ -17,7 +17,7 @@ try:
     # 查找 .env 文件
     env_file = Path(__file__).parent.parent.parent / ".env"
     if env_file.exists():
-        load_dotenv(env_file)
+        _ = load_dotenv(env_file)
         print(f"✅ 已加载环境变量文件: {env_file}")
     else:
         print(f"⚠️  .env 文件不存在: {env_file}")
@@ -171,7 +171,7 @@ async def search(
                 raise httpx.HTTPStatusError(error_msg, request=response.request, response=response)
             
             # 解析响应
-            response_data = response.json()
+            response_data: dict[str, Any] = response.json()
             
             if ctx:
                 await ctx.debug(f"API 响应状态: {response.status_code}")
@@ -191,7 +191,7 @@ async def search(
             return "未找到搜索结果"
         
         # 合并所有选择的内容
-        content_parts = []
+        content_parts: list[str] = []
         for choice in choices:
             if "message" in choice and "content" in choice["message"]:
                 content_parts.append(choice["message"]["content"])

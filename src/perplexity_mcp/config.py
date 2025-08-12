@@ -5,7 +5,7 @@ Perplexity MCP 服务器配置管理模块
 """
 
 import os
-from typing import Dict, Any, Optional
+from typing import Any
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from urllib.parse import urlparse
@@ -31,9 +31,9 @@ class ProxySettings:
     all_proxy: str = ""
     no_proxy: str = ""
     
-    def get_proxy_config(self) -> Dict[str, str]:
+    def get_proxy_config(self) -> dict[str, str]:
         """获取代理配置字典"""
-        proxies = {}
+        proxies: dict[str, str] = {}
         
         # 优先级：具体协议代理 > 通用代理
         if self.http_proxy:
@@ -48,7 +48,7 @@ class ProxySettings:
         
         return proxies
     
-    def get_httpx_proxy(self) -> Optional[str]:
+    def get_httpx_proxy(self) -> str | None:
         """获取 httpx 客户端使用的单一代理 URL"""
         proxies = self.get_proxy_config()
         if not proxies:
@@ -70,7 +70,7 @@ class ProxySettings:
         except Exception:
             return False
     
-    def get_proxy_info(self, proxy_url: str) -> Dict[str, str]:
+    def get_proxy_info(self, proxy_url: str) -> dict[str, str]:
         """获取代理信息（隐藏敏感信息）"""
         try:
             parsed = urlparse(proxy_url)
@@ -119,7 +119,7 @@ class ConfigManager:
         Args:
             config_file: 配置文件路径，默认为 config.json
         """
-        self.config_file = Path(config_file or "config.json")
+        self.config_file: Path = Path(config_file or "config.json")
         self._config: AppConfig | None = None
     
     def load_config(self) -> AppConfig:
@@ -144,7 +144,7 @@ class ConfigManager:
         self._config = config
         return config
     
-    def _load_from_file(self) -> Dict[str, Any]:
+    def _load_from_file(self) -> dict[str, Any]:
         """从文件加载配置"""
         if not self.config_file.exists():
             return {}
@@ -156,9 +156,9 @@ class ConfigManager:
             print(f"⚠️  警告: 配置文件加载失败: {e}")
             return {}
     
-    def _load_from_env(self) -> Dict[str, Any]:
+    def _load_from_env(self) -> dict[str, Any]:
         """从环境变量加载配置"""
-        env_config = {
+        env_config: dict[str, Any] = {
             "perplexity": {},
             "server": {},
             "proxy": {},
@@ -208,7 +208,7 @@ class ConfigManager:
         
         return env_config
     
-    def _merge_configs(self, file_config: Dict[str, Any], env_config: Dict[str, Any]) -> AppConfig:
+    def _merge_configs(self, file_config: dict[str, Any], env_config: dict[str, Any]) -> AppConfig:
         """合并配置，环境变量优先"""
         # 创建默认配置
         config = AppConfig(
@@ -249,7 +249,7 @@ class ConfigManager:
     
     def _validate_config(self, config: AppConfig) -> None:
         """验证配置"""
-        errors = []
+        errors: list[str] = []
         
         # 验证 Perplexity 配置
         if not config.perplexity.api_key:
@@ -323,6 +323,7 @@ class ConfigManager:
                 enable_cors=True,
                 max_request_size=1024 * 1024
             ),
+            proxy=ProxySettings(),
             debug=False,
             config_version="1.0"
         )
