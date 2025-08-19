@@ -16,7 +16,9 @@ import json
 class PerplexitySettings:
     """Perplexity 配置设置"""
     api_key: str = ""
+    api_url: str = "https://api.perplexity.ai/chat/completions"
     model: str = "sonar"
+    model_prefix: str = ""
     system_message: str = "Be precise and concise."
     timeout: float = 30.0
     max_retries: int = 3
@@ -168,7 +170,9 @@ class ConfigManager:
         # Perplexity 配置
         perplexity_env = {
             "api_key": os.getenv("PERPLEXITY_API_KEY", ""),
+            "api_url": os.getenv("PERPLEXITY_API_URL", ""),
             "model": os.getenv("PERPLEXITY_MODEL", ""),
+            "model_prefix": os.getenv("PERPLEXITY_MODEL_PREFIX", ""),
             "system_message": os.getenv("PERPLEXITY_SYSTEM_MESSAGE", ""),
             "timeout": self._parse_float(os.getenv("PERPLEXITY_TIMEOUT")),
             "max_retries": self._parse_int(os.getenv("PERPLEXITY_MAX_RETRIES")),
@@ -309,7 +313,9 @@ class ConfigManager:
         sample_config = AppConfig(
             perplexity=PerplexitySettings(
                 api_key="your-perplexity-api-key-here",
+                api_url="https://api.perplexity.ai/chat/completions",
                 model="sonar",
+                model_prefix="",
                 system_message="Be precise and concise. Provide accurate information.",
                 timeout=30.0,
                 max_retries=3,
@@ -332,7 +338,9 @@ class ConfigManager:
             "_comment": "Perplexity MCP 服务器配置文件",
             "_description": {
                 "perplexity.api_key": "Perplexity API 密钥 (必需)",
+                "perplexity.api_url": "Perplexity API 端点URL",
                 "perplexity.model": "使用的模型名称",
+                "perplexity.model_prefix": "模型名称前缀，会自动添加到模型名称前面",
                 "perplexity.system_message": "默认系统消息",
                 "perplexity.timeout": "请求超时时间（秒）",
                 "server.host": "服务器绑定地址",
@@ -394,7 +402,9 @@ class ConfigManager:
         
         print("📋 当前配置状态:")
         print(f"   🔑 API 密钥: {'已设置' if config.perplexity.api_key else '❌ 未设置'}")
+        print(f"   🌐 API URL: {config.perplexity.api_url}")
         print(f"   🤖 模型: {config.perplexity.model}")
+        print(f"   🏷️  模型前缀: {config.perplexity.model_prefix if config.perplexity.model_prefix else '未设置'}")
         print(f"   💬 系统消息: {config.perplexity.system_message[:50]}{'...' if len(config.perplexity.system_message) > 50 else ''}")
         print(f"   ⏱️  超时时间: {config.perplexity.timeout}秒")
         print(f"   🔄 最大重试: {config.perplexity.max_retries}次")

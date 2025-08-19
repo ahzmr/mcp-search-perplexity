@@ -122,6 +122,9 @@ async def search(
     
     # 使用传入的参数或默认配置
     used_model = model or config.perplexity.model
+    # 如果配置了模型前缀，自动添加到模型名称前面
+    if config.perplexity.model_prefix and not used_model.startswith(config.perplexity.model_prefix):
+        used_model = config.perplexity.model_prefix + used_model
     used_system_message = system_message or config.perplexity.system_message
     
     if ctx:
@@ -158,7 +161,7 @@ async def search(
         client = await create_http_client()
         async with client:
             response = await client.post(
-                "https://api.perplexity.ai/chat/completions",
+                config.perplexity.api_url,
                 headers=headers,
                 json=request_data
             )
