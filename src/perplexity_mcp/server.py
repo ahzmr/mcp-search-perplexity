@@ -94,10 +94,8 @@ async def search(
         keyword: 搜索关键词或问题，支持自然语言查询
         model: 模型名称（可选）。支持的模型包括：
             - sonar: 标准搜索模型，平衡速度和质量
-            - sonar-pro: 专业搜索模型，提供更深入的分析
             - sonar-reasoning: 推理增强模型，适合复杂问题
             - sonar-reasoning-pro: 专业推理模型，最高质量的分析
-            - sonar-deep-research: 深度研究模型，适合学术和研究查询
             默认使用配置文件中设置的模型
         system_message: 系统提示信息（可选），用于指导AI的回答风格和格式
             默认："Be precise and concise."
